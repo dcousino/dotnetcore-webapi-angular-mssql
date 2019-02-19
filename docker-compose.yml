@@ -2,7 +2,6 @@ version: '3.0'
 services:
   mssql:
     image: microsoft/mssql-server-linux:latest
-    container_name: mssql
     ports:
       - 1433:1433
     volumes:
@@ -18,24 +17,22 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - '3000:3000'
+      - '3050:4200'
     volumes:
       - /client/node_modules
       - ./client:/client
   api:
     depends_on:
       - mssql
-    image: namesweb
-    container_name: namesweb
     build:
-      context: ./namesweb
+      context: ./api
       dockerfile: Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
     ports:
-      - '57270:80'
-      - '44348:443'
+      - '46304:80'
+      - '44368:443'
     volumes:
       - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
       - ${HOME}/.aspnet/https:/root/.aspnet/https/
